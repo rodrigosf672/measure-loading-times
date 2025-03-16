@@ -16,7 +16,7 @@ This script measures the loading time of a webpage using Playwright. It simulate
 ## Usage
 1. Run the script:
    ```sh
-   node script.js
+   ts-node measureLoadingTime.spec.ts
    ```
 2. The script will:
    - Launch multiple browser instances concurrently.
@@ -40,3 +40,5 @@ Average loading time for 20 users over 5 iterations: 140 ms
 - Ensure network conditions are stable for accurate results.
 - Running many concurrent users may consume significant system resources.
 - The script defaults to testing `https://google.com`, but this can be modified as needed.
+- Results can be analyzed to track performance trends over time.
+- Data collected can be visualized using a Shiny Dashboard.
