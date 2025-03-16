@@ -24,6 +24,9 @@ jobs:
       - name: Install ts-node
         run: npm install -g ts-node typescript @types/node
 
+      - name: Install playwright
+        run: npx playwright install
+
       - name: Run Loading Time Measurement
         run: ts-node measureLoadingTime.spec.ts
 
