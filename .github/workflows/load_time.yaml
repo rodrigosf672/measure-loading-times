@@ -19,16 +19,19 @@ jobs:
           node-version: '20'
 
       - name: Install Dependencies
-        run: npm install playwright
+        run: npm install
+
+      - name: Install ts-node
+        run: npm install -g ts-node typescript @types/node
 
       - name: Run Loading Time Measurement
-        run: ts-node measureLoadingTime.spec.ts
+        run: npx ts-node measureLoadingTime.spec.ts
 
       - name: Commit and Push Results
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add loading_times.csv
-          git commit -m "Update loading times"
+          git commit -m "Update loading times" || echo "No changes to commit"
           git push
         continue-on-error: true
