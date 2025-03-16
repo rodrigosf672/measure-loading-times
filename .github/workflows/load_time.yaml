@@ -25,7 +25,7 @@ jobs:
         run: npm install -g ts-node typescript @types/node
 
       - name: Run Loading Time Measurement
-        run: npx ts-node measureLoadingTime.spec.ts
+        run: ts-node measureLoadingTime.spec.ts
 
       - name: Commit and Push Results
         run: |
