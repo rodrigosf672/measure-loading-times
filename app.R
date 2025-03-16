@@ -3,6 +3,7 @@ library(ggplot2)
 library(readr)
 library(dplyr)
 library(plotly)
+library(DT)
 
 # Read CSV data
 load_data <- function() {
@@ -24,10 +25,13 @@ ui <- fluidPage(
     
     sidebarLayout(
         sidebarPanel(
-            selectInput("userFilter", "Select Number of Users:", choices = NULL, multiple = TRUE)
+            checkboxGroupInput("userFilter", "Select Number of Users:", choices = NULL)
         ),
         mainPanel(
-            plotlyOutput("loadingTimePlot")
+            tabsetPanel(
+                tabPanel("Plot", plotlyOutput("loadingTimePlot")),
+                tabPanel("Summary", DTOutput("summaryTable"))
+            )
         )
     )
 )
@@ -46,7 +50,7 @@ server <- function(input, output, session) {
     })
 
     observe({
-        updateSelectInput(session, "userFilter", choices = unique(load_data()$Users))
+        updateCheckboxGroupInput(session, "userFilter", choices = unique(load_data()$Users))
     })
 
     output$loadingTimePlot <- renderPlotly({
@@ -59,6 +63,20 @@ server <- function(input, output, session) {
             theme_minimal()
 
         ggplotly(p)
+    })
+
+    output$summaryTable <- renderDT({
+        df <- data()
+
+        summary_df <- df %>%
+            group_by(Users) %>%
+            summarise(
+                Min_Loading_Time = min(Avg_Loading_Time),
+                Max_Loading_Time = max(Avg_Loading_Time),
+                Avg_Loading_Time = mean(Avg_Loading_Time)
+            )
+
+        datatable(summary_df)
     })
 }
 
