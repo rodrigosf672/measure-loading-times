@@ -7,14 +7,23 @@ library(DT)
 
 # Read CSV data
 load_data <- function() {
-    github_url <- "https://raw.githubusercontent.com/rodrigosf672/measure-loading-times/main/loading_times.csv"
-    
-    df <- read.csv(github_url, header = FALSE, col.names = c("Timestamp", "Users", "Avg_Loading_Time"))
+  if (file.exists("loading_times.csv")) {
+    df <- read_csv("loading_times.csv", col_names = FALSE, show_col_types = FALSE)
+    colnames(df) <- c("Timestamp", "Users", "Avg_Loading_Time")
 
     # Convert Timestamp to date format
     df$Timestamp <- as.POSIXct(df$Timestamp, format="%Y-%m-%dT%H:%M:%OSZ", tz="UTC")
     
+    # Add Observation column
+    df <- df %>%
+      group_by(Users) %>%
+      mutate(Observation = row_number()) %>%
+      ungroup()
+      
     return(df)
+  } else {
+    return(data.frame(Timestamp = as.POSIXct(character()), Users = integer(), Avg_Loading_Time = double(), Observation = integer()))
+  }
 }
 
 # Define UI
@@ -44,7 +53,8 @@ server <- function(input, output, session) {
             return(df)  # Return all data if no selection is made
         }
 
-        df %>% filter(Users %in% input$userFilter)
+        filtered_df <- df %>% filter(Users %in% input$userFilter)
+        return(filtered_df)
     })
 
     observe({
@@ -53,14 +63,18 @@ server <- function(input, output, session) {
 
     output$loadingTimePlot <- renderPlotly({
         df <- data()
-
-        p <- ggplot(df, aes(x = Observation, y = Avg_Loading_Time, color = as.factor(Users))) +
-            geom_line() +
+        p <- ggplot(df, aes(x = Observation, y = Avg_Loading_Time, color = as.factor(Users), 
+                            text = paste("Observation:", Observation, 
+                                         "<br>Date/Time in UTC:", Timestamp, 
+                                         "<br>Average Loading Time:", round(Avg_Loading_Time), 
+                                         "<br>Number of Users:", Users))) +
+            geom_line(aes(group = Users), size = 0.3) + 
             geom_point() +
+            scale_x_continuous(breaks = scales::pretty_breaks(n = max(df$Observation)), labels = scales::number_format(accuracy = 1)) +
             labs(x = "Observation", y = "Average Loading Time (ms)", color = "Number of Users", title = "I Chart of Average Loading Times") +
             theme_minimal()
 
-        ggplotly(p)
+        ggplotly(p, tooltip = "text")
     })
 
     output$summaryTable <- renderDT({
@@ -69,9 +83,9 @@ server <- function(input, output, session) {
         summary_df <- df %>%
             group_by(Users) %>%
             summarise(
-                Min_Loading_Time = min(Avg_Loading_Time),
-                Max_Loading_Time = max(Avg_Loading_Time),
-                Avg_Loading_Time = mean(Avg_Loading_Time)
+                MinimumAverageLoadingTime = round(min(Avg_Loading_Time)),
+                MaximumAverageLoadingTime = round(max(Avg_Loading_Time)),
+                MeanAllAverageLoadingTimes = round(mean(Avg_Loading_Time))
             )
 
         datatable(summary_df)
