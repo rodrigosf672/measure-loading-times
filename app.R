@@ -7,21 +7,19 @@ library(DT)
 
 # Read CSV data
 load_data <- function() {
-  if (file.exists("loading_times.csv")) {
-    df <- read_csv("loading_times.csv", col_names = FALSE, show_col_types = FALSE)
-    colnames(df) <- c("Timestamp", "Users", "Avg_Loading_Time")
+    github_url <- "https://raw.githubusercontent.com/rodrigosf672/measure-loading-times/main/loading_times.csv"
+    
+    df <- read.csv(github_url, header = FALSE, col.names = c("Timestamp", "Users", "Avg_Loading_Time"))
 
-    # Add Observation column
-    df$Observation <- seq_len(nrow(df))
+    # Convert Timestamp to date format
+    df$Timestamp <- as.POSIXct(df$Timestamp, format="%Y-%m-%dT%H:%M:%OSZ", tz="UTC")
+    
     return(df)
-  } else {
-    return(data.frame(Timestamp = as.POSIXct(character()), Users = integer(), Avg_Loading_Time = double(), Observation = integer()))
-  }
 }
 
 # Define UI
 ui <- fluidPage(
-    titlePanel("Loading Times"),
+    titlePanel("Google.com Loading Times"),
     
     sidebarLayout(
         sidebarPanel(
