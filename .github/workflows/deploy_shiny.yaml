@@ -40,4 +40,5 @@ jobs:
           Rscript -e "rsconnect::setAccountInfo(name=Sys.getenv('SHINYAPPS_NAME'),
                                                 token=Sys.getenv('SHINYAPPS_TOKEN'),
                                                 secret=Sys.getenv('SHINYAPPS_SECRET'))"
+          Rscript -e "rsconnect::setServer('shinyapps.io', 'https://api.shinyapps.io')"
           Rscript -e "rsconnect::deployApp('.')"
