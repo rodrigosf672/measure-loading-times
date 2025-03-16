@@ -22,7 +22,7 @@ jobs:
         run: npm install playwright
 
       - name: Run Loading Time Measurement
-        run: node script.js
+        run: ts-node measureLoadingTime.spec.ts
 
       - name: Commit and Push Results
         run: |
