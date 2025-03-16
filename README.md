@@ -1,4 +1,4 @@
-# Playwright Loading Time Measurement
+# Playwright Loading Time Measurement of Google.com Page with concurrent 1-5 Users (Simulation)
 
 ## Overview
 This script measures the loading time of a webpage using Playwright. It simulates multiple users accessing a specified URL concurrently and calculates the average loading time over multiple iterations.
