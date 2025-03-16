@@ -32,8 +32,8 @@ jobs:
 
       - name: Commit and Push Results
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
+          git config --global user.name "rodrigosf672"
+          git config --global user.email "rodrigosf672@gmail.com"
           git add loading_times.csv
           git commit -m "Update loading times" || echo "No changes to commit"
           git push
