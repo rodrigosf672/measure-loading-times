@@ -33,7 +33,7 @@ async function measureLoadingTime(users, iterations) {
 
 (async () => {
   const iterations = 5;
-  for (const users of [10, 20, 30, 40, 50]) {
+  for (const users of [1, 2, 3, 4, 5]) {
     await measureLoadingTime(users, iterations);
   }
 })();
