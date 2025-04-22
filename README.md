@@ -46,6 +46,7 @@ Average loading time for 2 user(s) over 5 iterations: 140 ms
 ## Disclaimer
 - This project uses `https://google.com` solely as a stable test case for personal learning and educational purposes.
 - It makes a low and limited number of automated requests, and does not involve scraping, user interaction automation, or high-frequency traffic.
-- This project is provided as-is for educational use. If you modify the code, you are solely responsible for ensuring your usage complies with all applicable terms and laws.
+- This project is provided as-is for educational use. If you choose to modify or adapt it, you are solely responsible for ensuring that your usage complies with all applicable laws and remains respectful of any target site's terms of service, rate limits, and infrastructure.
+
 
 
