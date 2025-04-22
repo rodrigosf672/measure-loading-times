@@ -31,8 +31,8 @@ This script measures the loading time of a webpage using Playwright. It simulate
 
 ## Example Output
 ```
-Average loading time for 10 users over 5 iterations: 120 ms
-Average loading time for 20 users over 5 iterations: 140 ms
+Average loading time for 1 user(s) over 5 iterations: 120 ms
+Average loading time for 2 user(s) over 5 iterations: 140 ms
 ...
 ```
 
@@ -42,3 +42,10 @@ Average loading time for 20 users over 5 iterations: 140 ms
 - The script defaults to testing `https://google.com`, but this can be modified as needed.
 - Results can be analyzed to track performance trends over time.
 - Data collected can be visualized using a Shiny Dashboard.
+
+## Disclaimer
+- This project uses `https://google.com` solely as a stable test case for personal learning and educational purposes.
+- It makes a low and limited number of automated requests, and does not involve scraping, user interaction automation, or high-frequency traffic.
+- This project is provided as-is for educational use. If you modify the code, you are solely responsible for ensuring your usage complies with all applicable terms and laws.
+
+
