@@ -4,6 +4,7 @@ library(readr)
 library(dplyr)
 library(plotly)
 library(DT)
+library(scales)
 
 # Read CSV data
 load_data <- function() {
@@ -63,6 +64,18 @@ server <- function(input, output, session) {
 
     output$loadingTimePlot <- renderPlotly({
         df <- data()
+        
+        # Check if data is empty
+        if (nrow(df) == 0) {
+            p <- ggplot() + 
+                annotate("text", x = 0.5, y = 0.5, label = "No data available", size = 6) +
+                xlim(0, 1) + ylim(0, 1) +
+                labs(title = "I Chart of Average Loading Times") +
+                theme_minimal() +
+                theme(axis.text = element_blank(), axis.ticks = element_blank())
+            return(ggplotly(p))
+        }
+        
         p <- ggplot(df, aes(x = Observation, y = Avg_Loading_Time, color = as.factor(Users), 
                             text = paste("Observation:", Observation, 
                                          "<br>Date/Time in UTC:", Timestamp, 
@@ -79,13 +92,25 @@ server <- function(input, output, session) {
 
     output$summaryTable <- renderDT({
         df <- data()
+        
+        # Check if data is empty
+        if (nrow(df) == 0) {
+            empty_df <- data.frame(
+                Users = integer(),
+                MinimumAverageLoadingTime = integer(),
+                MaximumAverageLoadingTime = integer(),
+                MeanAllAverageLoadingTimes = integer()
+            )
+            return(datatable(empty_df, options = list(dom = 't')))
+        }
 
         summary_df <- df %>%
             group_by(Users) %>%
             summarise(
                 MinimumAverageLoadingTime = round(min(Avg_Loading_Time)),
                 MaximumAverageLoadingTime = round(max(Avg_Loading_Time)),
-                MeanAllAverageLoadingTimes = round(mean(Avg_Loading_Time))
+                MeanAllAverageLoadingTimes = round(mean(Avg_Loading_Time)),
+                .groups = 'drop'
             )
 
         datatable(summary_df)
