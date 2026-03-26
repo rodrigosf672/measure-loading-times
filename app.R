@@ -83,7 +83,7 @@ server <- function(input, output, session) {
                                          "<br>Number of Users:", Users))) +
             geom_line(aes(group = Users), size = 0.3) + 
             geom_point() +
-            scale_x_continuous(breaks = scales::pretty_breaks(n = max(df$Observation)), labels = scales::number_format(accuracy = 1)) +
+            scale_x_continuous(breaks = scales::pretty_breaks(n = 10), labels = scales::number_format(accuracy = 1)) +
             labs(x = "Observation", y = "Average Loading Time (ms)", color = "Number of Users", title = "I Chart of Average Loading Times") +
             theme_minimal()
 
