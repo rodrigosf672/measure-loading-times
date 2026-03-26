@@ -1,0 +1,43 @@
+name: Update Performance Analysis Notebook
+
+on:
+  schedule:
+    - cron: "15 * * * *"  # Runs 15 minutes after the hour (after data collection)
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  update-notebook:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history to ensure we have the latest CSV
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Execute Notebook
+        run: |
+          jupyter nbconvert --to notebook --execute --inplace performance_analysis.ipynb
+
+      - name: Convert Notebook to HTML
+        run: |
+          jupyter nbconvert --to html performance_analysis.ipynb --output performance_analysis.html
+
+      - name: Commit and Push Updated Notebook
+        run: |
+          git config --global user.name "rodrigosf672"
+          git config --global user.email "rodrigosf672@gmail.com"
+          git add performance_analysis.ipynb performance_analysis.html
+          git commit -m "Update performance analysis notebook [automated]" || echo "No changes to commit"
+          git push
+        continue-on-error: true
