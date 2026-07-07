@@ -1,0 +1,47 @@
+# CI for the additive dashboard/ subfolder only.
+# This workflow is NEW and independent; it does not touch the existing
+# load_time.yaml / update_notebook.yaml data-collection workflows.
+name: Dashboard CI
+
+on:
+  push:
+    paths:
+      - 'dashboard/**'
+      - '.github/workflows/dashboard-ci.yml'
+  pull_request:
+    paths:
+      - 'dashboard/**'
+      - '.github/workflows/dashboard-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dashboard
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: dashboard/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Build (copies loading_times.csv from repo root)
+        run: npm run build
+
+      - name: Smoke-check build output
+        run: |
+          test -f dist/index.html
+          test -f public/data/loading_times.csv
+          echo "Build OK: $(wc -l < public/data/loading_times.csv) data rows bundled"

@@ -1,0 +1,5 @@
+node_modules
+dist
+public/data/loading_times.csv
+*.local
+.DS_Store

@@ -1,0 +1,31 @@
+{
+  "name": "measure-loading-times-dashboard",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Live browser page-load observability dashboard powered by Playwright loading-time data.",
+  "license": "MIT",
+  "scripts": {
+    "copy-data": "node scripts/copy-data.mjs",
+    "predev": "npm run copy-data",
+    "dev": "vite",
+    "prebuild": "npm run copy-data",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "papaparse": "^5.4.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^2.12.7"
+  },
+  "devDependencies": {
+    "@types/papaparse": "^5.3.14",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.2",
+    "typescript": "^5.6.2",
+    "vite": "^5.4.8"
+  }
+}

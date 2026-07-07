@@ -1,0 +1,12 @@
+# Build + serve the static dashboard.
+# Run from the repo root OR from dashboard/ (context points at the repo root):
+#   docker compose -f dashboard/docker-compose.yml up --build
+# Then open http://localhost:8080
+services:
+  dashboard:
+    build:
+      context: ..
+      dockerfile: dashboard/Dockerfile
+    ports:
+      - "8080:80"
+    restart: unless-stopped
